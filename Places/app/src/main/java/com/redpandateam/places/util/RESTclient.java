@@ -2,10 +2,13 @@ package com.redpandateam.places.util;
 
 import android.content.Context;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.redpandateam.places.model.Coordinates;
 
@@ -14,6 +17,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by bjornlexell on 11/08/15.
@@ -79,5 +84,35 @@ public class RESTclient {
 
         return coordinates;
     }
+
+
+    public void addSongPlace(String user, String songID, double lon, double lat){
+
+        JSONObject jo = new JSONObject();
+        try {
+            jo.put("UserID", user);
+            jo.put("SpotifyID", songID);
+            jo.put("lat", lat);
+            jo.put("long", lon);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jObjR = new JsonObjectRequest(Request.Method.POST, url + "/songplace",
+                new Response.Listener<JSONObject>(){
+
+                    @Override
+                    public void onResponse(JSONObject response){
+
+                    }
+                }, null);
+
+        queue.add(jObjR);
+
+    }
+
+
+    
 }
 
