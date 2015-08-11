@@ -1,8 +1,8 @@
 package com.redpandateam.places.util;
 
+import android.app.Application;
 import android.content.Context;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -17,29 +17,59 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by bjornlexell on 11/08/15.
  */
-public class RESTclient {
+public class RESTclient extends Application{
 
-    String url;
-    RequestQueue queue;
+    private String url;
+    private RequestQueue queue;
+    private SongPlace sp;
+    private static RESTclient instance;
 
     ArrayList<SongPlace> songPlaces;
 
-    public RESTclient(Context ctx){
-
-        queue = Volley.newRequestQueue(ctx);
+    @Override
+    public void onCreate(){
+        super.onCreate();
+        instance = this;
         this.url = "http://localhost:9999";
         songPlaces = new ArrayList<SongPlace>();
+
     }
 
-    public ArrayList<SongPlace> getSongPlaces() {
+    public static synchronized RESTclient getInstance(){
+        return instance;
 
-        JsonArrayRequest arrayRequest = new JsonArrayRequest(url + "/songplaces", new Response.Listener<JSONArray>() {
+    }
+
+    public <T> void addToRequestQueue(Request <T> req){
+        getRequestQueue().add(req);
+    }
+
+    public RequestQueue getRequestQueue(){
+        if(queue == null){
+            queue = Volley.newRequestQueue(getApplicationContext());
+        }
+
+        return queue;
+    }
+
+    public ArrayList<SongPlace> getSongPlaces(double lat1, double lat2, double lon1, double lon2) {
+
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("lat1", lat1);
+            obj.put("lat2", lat2);
+            obj.put("lon1", lon1);
+            obj.put("lon2", lon2);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.POST, url + "/songplaces", obj, new Response.Listener<JSONArray>() {
 
             @Override
             public void onResponse(JSONArray response) {
@@ -72,20 +102,23 @@ public class RESTclient {
 
         }, null);
 
-        queue.add(arrayRequest);
+        addToRequestQueue(arrayRequest);
 
         return songPlaces;
     }
 
 
-    public void addSongPlace(String user, String songID, double lon, double lat){
+    public void saveSongPlace(String user, String songID, String title, String album, String artist, double lon, double lat){
 
         JSONObject jo = new JSONObject();
         try {
             jo.put("UserID", user);
             jo.put("SpotifyID", songID);
-            jo.put("lat", lat);
-            jo.put("long", lon);
+            jo.put("PlaceLat", lat);
+            jo.put("PlaceLong", lon);
+            jo.put("Title", title);
+            jo.put("Album", album);
+            jo.put("Artist", artist);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -96,21 +129,22 @@ public class RESTclient {
 
                     @Override
                     public void onResponse(JSONObject response){
-
+                        System.out.println(response);
                     }
                 }, null);
 
-        queue.add(jObjR);
+        addToRequestQueue(jObjR);
 
     }
 
-    public void likeSong(String user, String songID, double lon, double lat){
+    public void likeOrUnlikeSongPlace(SongPlace songPlace, String user){
+        sp = songPlace;
         JSONObject jo = new JSONObject();
         try {
             jo.put("UserID", user);
-            jo.put("SpotifyID", songID);
-            jo.put("lat", lat);
-            jo.put("long", lon);
+            jo.put("SpotifyID", sp.getSongID());
+            jo.put("lat", sp.getLat());
+            jo.put("long", sp.getLon());
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -121,11 +155,18 @@ public class RESTclient {
 
                     @Override
                     public void onResponse(JSONObject response){
+                        try {
+
+                            sp.incOrDecLikes((boolean)response.getBoolean("Like"));
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
                     }
                 }, null);
 
-        queue.add(jObjR);
+        addToRequestQueue(jObjR);
     }
 
 
