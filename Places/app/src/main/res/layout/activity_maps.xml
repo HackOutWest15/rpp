@@ -1,8 +1,26 @@
-<fragment
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/map"
-    tools:context="com.redpandateam.places.MapsActivity"
-    android:name="com.google.android.gms.maps.SupportMapFragment" />
+    tools:context=".MainActivity">
+
+    <fragment
+        android:id="@+id/googleMap"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        class="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_above="@+id/latlongLocation" />
+
+    <TextView
+        android:id="@+id/latlongLocation"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:layout_alignParentBottom="true"
+        android:background="#000000"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:textColor="#ffffffff"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp" />
+</RelativeLayout>
