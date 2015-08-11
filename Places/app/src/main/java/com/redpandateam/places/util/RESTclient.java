@@ -99,7 +99,7 @@ public class RESTclient {
             e.printStackTrace();
         }
 
-        JsonObjectRequest jObjR = new JsonObjectRequest(Request.Method.POST, url + "/songplace",
+        JsonObjectRequest jObjR = new JsonObjectRequest(Request.Method.POST, url + "/songplace", jo,
                 new Response.Listener<JSONObject>(){
 
                     @Override
@@ -113,6 +113,6 @@ public class RESTclient {
     }
 
 
-    
+
 }
 
