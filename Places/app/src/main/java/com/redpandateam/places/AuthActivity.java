@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.spotify.sdk.android.player.Spotify;
 import com.spotify.sdk.android.authentication.AuthenticationClient;
@@ -16,6 +17,8 @@ import com.spotify.sdk.android.player.ConnectionStateCallback;
 import com.spotify.sdk.android.player.Player;
 import com.spotify.sdk.android.player.PlayerNotificationCallback;
 import com.spotify.sdk.android.player.PlayerState;
+
+import org.apache.http.auth.AUTH;
 
 public class AuthActivity extends AppCompatActivity implements
         PlayerNotificationCallback, ConnectionStateCallback {
@@ -80,7 +83,7 @@ public class AuthActivity extends AppCompatActivity implements
                     public void onInitialized(Player player) {
                         mPlayer.addConnectionStateCallback(AuthActivity.this);
                         mPlayer.addPlayerNotificationCallback(AuthActivity.this);
-                        mPlayer.play("spotify:track:2TpxZ7JUBn3uw46aR7qd6V");
+                        //mPlayer.play("spotify:track:2TpxZ7JUBn3uw46aR7qd6V");
                     }
 
                     @Override
@@ -95,6 +98,9 @@ public class AuthActivity extends AppCompatActivity implements
     @Override
     public void onLoggedIn() {
         Log.d("AuthActivity", "User logged in");
+        finish();
+        Intent myIntent = new Intent(AuthActivity.this, MainActivity.class);
+        AuthActivity.this.startActivity(myIntent);
     }
 
     @Override
