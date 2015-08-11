@@ -2,9 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.redpandateam.places" >
 
-<<<<<<< HEAD
-<uses-permission android:name="android.permission.INTERNET"/>
-=======
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -16,7 +13,6 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.internet"/>
->>>>>>> c4659eb45356d998d646cc0febc02692af941e1b
 
     <application
         android:allowBackup="true"
@@ -32,12 +28,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<<<<<<< HEAD
+
         <activity
             android:name="com.spotify.sdk.android.authentication.LoginActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-=======
-
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" >
@@ -52,8 +46,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key"/>
-
->>>>>>> c4659eb45356d998d646cc0febc02692af941e1b
     </application>
 
 </manifest>
