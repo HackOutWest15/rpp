@@ -29,15 +29,10 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 1337;
 
     private Player mPlayer;
-    private RESTclient rc;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        rc = new RESTclient(this);
-
 
         Button mapButton = (Button) findViewById(R.id.mapButton);
         mapButton.setOnClickListener(new View.OnClickListener() {
@@ -80,6 +75,5 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-
+    
 }
