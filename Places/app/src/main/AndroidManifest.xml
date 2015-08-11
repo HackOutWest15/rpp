@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.redpandateam.places" >
 
+    <permission
+        android:name="com.redpandateam.places.permission.MAPS_RECEIVE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.redpandateam.places.permission.MAPS_RECEIVE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -12,7 +17,6 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.internet" />
 
     <application
         android:allowBackup="true"
@@ -27,9 +31,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-
-
         </activity>
         <activity
             android:name="com.spotify.sdk.android.authentication.LoginActivity"
@@ -37,6 +38,14 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.redpandateam.places.MainActivity" />
+        </activity>
+        <activity
+            android:name=".AuthActivity"
+            android:label="@string/title_activity_auth"
+            android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.redpandateam.places.MainActivity" />
@@ -49,14 +58,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity
-            android:name=".AuthActivity"
-            android:label="@string/title_activity_auth"
-            android:parentActivityName=".MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.redpandateam.places.MainActivity" />
-        </activity>
     </application>
 
 </manifest>
