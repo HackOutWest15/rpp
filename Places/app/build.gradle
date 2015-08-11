@@ -37,4 +37,6 @@ dependencies {
 
     // All other dependencies for your app should also be here:
     compile 'com.android.support:appcompat-v7:22.1.1'
+
+    compile 'com.mcxiaoke.volley:library:1.+'
 }
