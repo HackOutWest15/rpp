@@ -8,6 +8,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.redpandateam.places.util.MusicHandler;
+import com.redpandateam.places.util.MyBroadcastReceiver;
 import com.spotify.sdk.android.player.Spotify;
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
@@ -17,8 +19,6 @@ import com.spotify.sdk.android.player.ConnectionStateCallback;
 import com.spotify.sdk.android.player.Player;
 import com.spotify.sdk.android.player.PlayerNotificationCallback;
 import com.spotify.sdk.android.player.PlayerState;
-
-import org.apache.http.auth.AUTH;
 
 public class AuthActivity extends AppCompatActivity implements
         PlayerNotificationCallback, ConnectionStateCallback {
@@ -31,7 +31,7 @@ public class AuthActivity extends AppCompatActivity implements
     // Request code that will be passed together with authentication result to the onAuthenticationResult callback
     // Can be any integer
     private static final int REQUEST_CODE = 1337;
-
+    private final MyBroadcastReceiver mReceiver = new MyBroadcastReceiver();
     private Player mPlayer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +84,8 @@ public class AuthActivity extends AppCompatActivity implements
                         mPlayer.addConnectionStateCallback(AuthActivity.this);
                         mPlayer.addPlayerNotificationCallback(AuthActivity.this);
                         //mPlayer.play("spotify:track:2TpxZ7JUBn3uw46aR7qd6V");
+                        //mPlayer.play(mReceiver.getSongId());
+
                     }
 
                     @Override
@@ -99,8 +101,6 @@ public class AuthActivity extends AppCompatActivity implements
     public void onLoggedIn() {
         Log.d("AuthActivity", "User logged in");
         finish();
-        Intent myIntent = new Intent(AuthActivity.this, MainActivity.class);
-        AuthActivity.this.startActivity(myIntent);
     }
 
     @Override
