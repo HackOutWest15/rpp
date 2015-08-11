@@ -42,6 +42,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.redpandateam.places.MainActivity" />
         </activity>
+        <activity
+            android:name=".AuthActivity"
+            android:label="@string/title_activity_auth"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.redpandateam.places.MainActivity" />
+        </activity>
 
         <meta-data
             android:name="com.google.android.gms.version"
