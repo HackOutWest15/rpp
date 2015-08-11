@@ -28,7 +28,6 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private RESTclient rc;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -42,10 +41,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        rc = new RESTclient(this);
 
 
-        /*Button mapButton = (Button) findViewById(R.id.mapButton);
+        Button mapButton = (Button) findViewById(R.id.mapButton);
         mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent myIntent = new Intent(MainActivity.this, AuthActivity.class);
                 MainActivity.this.startActivity(myIntent);
             }
-        });*/
+        });
 
         // load navigation drawer items
         navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
@@ -182,5 +180,4 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
 }

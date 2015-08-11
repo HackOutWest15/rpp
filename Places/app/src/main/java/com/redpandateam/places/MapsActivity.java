@@ -23,14 +23,11 @@ import com.redpandateam.places.util.RESTclient;
 public class MapsActivity extends AppCompatActivity implements LocationListener {
 
     GoogleMap googleMap;
-    private RESTclient rc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-
-        rc = new RESTclient(this);
 
         //show error dialog if GooglePlayServices not available
         if (!isGooglePlayServicesAvailable()) {

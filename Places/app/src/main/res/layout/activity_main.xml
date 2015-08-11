@@ -42,10 +42,28 @@ android:id="@+id/drawer_layout"
 android:layout_width="match_parent"
 android:layout_height="match_parent">
 <!-- The main content view -->
+
 <FrameLayout
     android:id="@+id/frame_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/mapButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/title_activity_maps" />
+
+    <Button
+        android:id="@+id/loginButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/title_activity_auth"
+        android:gravity="right"
+        android:layout_gravity="right"
+        android:layout_below="@+id/mapButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </FrameLayout>
 
