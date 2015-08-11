@@ -1,34 +1,40 @@
-var express = require('express');
-var mysql = require('mysql');
-//var alg = require('./algorithm');
-//var movies = require('./movies');
-var app = express();
-var movieName = 'Pocahontas';
-//var scripts = require('./scripts/app.js');
+var express = require('express'),
+    mysql = require('mysql'),
+    app = express(),
+    db = require('./scripts/databaseHandler.js'),
+    bodyParser = require('body-parser');
 
+db.init();
 
-//app.get('/', function (req, res) {
-  //res.sendfile(__dirname + '/index.html');
-//});
+app.use(bodyParser.json());
+//res.setHeader({ 'Content-Type': 'application/json' });
 
-//app.get('/styles.css', function (req, res) {
-  //res.sendfile(__dirname + '/styles.css');
-//});
+app.get('/songtest', function (req, res) {
+    db.testData();
+    res.end("testdata");
+});
 
-//app.get('/getRecommendedMovies', function(req, res) {
-  //for (var i = 0; i < movies.movies.length ; i++) {
-    //movieName = movies.movies[i];
-    //alg.getResult(req.query.film, movieName, function(result) {
-      //res.send(result);
-    //});
-  //}
-//});
+app.post('/songplaces', function (req, res) {
+    db.getSongPlaces(req.body.lat1, req.body.long1, req.body.lat2, req.body.long2, function(result) {
+        // result.forEach(function (re) {
+        // });
+        res.json(result);
+    });
+});
+
+app.post('/songplace', function (req, res) {
+    var body = req.body;
+    db.insertSongPlace(body.UserID, body.Title, body.Artist, body.Album, body.PlaceLat, body.PlaceLong, body.SpotifyID, function(result) {
+        res.end(result?"Success":"Fail");
+    });
+});
+
 
 var server = app.listen(9999, function () {
 
-  var host = server.address().address;
-  var port = server.address().port;
+    var host = server.address().address;
+    var port = server.address().port;
 
-  console.log('Server up and running', host, port);
+    console.log('Server up and running', host, port);
 
 });
