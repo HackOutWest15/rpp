@@ -23,7 +23,7 @@ public class AuthActivity extends AppCompatActivity implements
     // TODO: Replace with your client ID
     private static final String CLIENT_ID = "5ca32746c9214541a8824cf942ce7dd9";
     // TODO: Replace with your redirect URI
-    private static final String REDIRECT_URI = "localhost:9999/songplaces";
+    private static final String REDIRECT_URI = "yourcustomprotocol://callback";
 
     // Request code that will be passed together with authentication result to the onAuthenticationResult callback
     // Can be any integer
