@@ -31,7 +31,7 @@ public class AuthActivity extends AppCompatActivity implements
     // Request code that will be passed together with authentication result to the onAuthenticationResult callback
     // Can be any integer
     private static final int REQUEST_CODE = 1337;
-    private final MyBroadcastReceiver mReceiver = new MyBroadcastReceiver();
+    //private final MyBroadcastReceiver mReceiver = new MyBroadcastReceiver();
     private Player mPlayer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +45,7 @@ public class AuthActivity extends AppCompatActivity implements
         AuthenticationRequest request = builder.build();
 
         AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
+
     }
 
     @Override
@@ -85,6 +86,7 @@ public class AuthActivity extends AppCompatActivity implements
                         mPlayer.addPlayerNotificationCallback(AuthActivity.this);
                         //mPlayer.play("spotify:track:2TpxZ7JUBn3uw46aR7qd6V");
                         //mPlayer.play(mReceiver.getSongId());
+                        //System.out.println("AuthActivity" + mReceiver.getSongId());
 
                     }
 

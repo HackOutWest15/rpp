@@ -15,10 +15,13 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.redpandateam.places.util.MyBroadcastReceiver;
 
 public class MapsActivity extends FragmentActivity implements LocationListener {
 
     GoogleMap googleMap;
+
+    private final MyBroadcastReceiver mReceiver = new MyBroadcastReceiver();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +74,8 @@ public class MapsActivity extends FragmentActivity implements LocationListener {
                 googleMap.addMarker(markerOptions);
             }
         });
+
+        System.out.println("TRACKID " + mReceiver.getSongId());
     }
 
     @Override
