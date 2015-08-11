@@ -7,6 +7,7 @@ module.exports = {
     getSongPlaces: getSongPlaces,
     testData: testData,
     insertSongPlace: insertSongPlace,
+    likeSongPlace: likeSongPlace,
     //getSub: getSub,
     //createTable: createTable,
 
@@ -80,8 +81,15 @@ function insertSongPlace(uid, title, artist, album, placelat, placelong, spotify
 }
 
 //UserID, SpotifyID, PlaceLat, PlaceLong
-function likeSongPlace(uid, spotifyid, placelat, placelong) {
-    connection.query(INSERT_LIKE, [uid, spotifyid, placelat, placelong]);
+function likeSongPlace(uid, spotifyid, placelat, placelong, callback) {
+    connection.query(INSERT_LIKE, [uid, spotifyid, placelat, placelong], function(err, result) {
+        if (err) {
+            console.log(err);
+            callback(err);
+        } else {
+            callback(result);
+        }
+    });
 }
 
 function getSongPlaces(lat1, long1, lat2, long2, callback) {
