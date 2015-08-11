@@ -6,6 +6,9 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -15,15 +18,19 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.redpandateam.places.util.RESTclient;
 
-public class MapsActivity extends FragmentActivity implements LocationListener {
+public class MapsActivity extends AppCompatActivity implements LocationListener {
 
     GoogleMap googleMap;
+    private RESTclient rc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        rc = new RESTclient(this);
 
         //show error dialog if GooglePlayServices not available
         if (!isGooglePlayServicesAvailable()) {
@@ -74,6 +81,26 @@ public class MapsActivity extends FragmentActivity implements LocationListener {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                finish();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onLocationChanged(Location location) {
 
         TextView locationTv = (TextView) findViewById(R.id.latlongLocation);
@@ -113,4 +140,5 @@ public class MapsActivity extends FragmentActivity implements LocationListener {
             return false;
         }
     }
+
 }
