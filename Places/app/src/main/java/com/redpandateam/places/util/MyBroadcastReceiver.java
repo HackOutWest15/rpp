@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 
 import com.redpandateam.places.MapsActivity;
+import com.redpandateam.places.model.CurrentTrack;
 import com.redpandateam.places.model.SongPlace;
 
 public class MyBroadcastReceiver extends BroadcastReceiver {
@@ -34,9 +35,9 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
             String artistName = intent.getStringExtra("artist");
             String albumName = intent.getStringExtra("album");
             String trackName = intent.getStringExtra("track");
-            //updateCurrentTrack(id, artistName, albumName,trackName);
+            CurrentTrack.getInstance().updateCurrentTrack(id, artistName, albumName,trackName);
 
-            RESTclient.getInstance().setTrack(trackName);
+
             int trackLengthInSec = intent.getIntExtra("length", 0);
             // Do something with extracted information...
         } else if (action.equals(BroadcastTypes.PLAYBACK_STATE_CHANGED)) {
