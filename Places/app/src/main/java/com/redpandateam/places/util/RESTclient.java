@@ -13,6 +13,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.redpandateam.places.model.SongPlace;
+import com.redpandateam.places.model.SongPlacesContainer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,14 +34,14 @@ public class RESTclient extends Application{
     private String id, artist, album, track;
 
 
-    ArrayList<SongPlace> songPlaces;
+    private ArrayList<SongPlace> songPlaces;
 
     @Override
     public void onCreate(){
         super.onCreate();
         instance = this;
         this.url = "http://10.47.12.31:9999";
-        songPlaces = new ArrayList<SongPlace>();
+        this.songPlaces = new ArrayList<SongPlace>();
 
     }
 
@@ -61,7 +62,9 @@ public class RESTclient extends Application{
         return queue;
     }
 
-    public ArrayList<SongPlace> getAllSongPlaces() {
+    public void fetchAllSongPlaces() {
+
+        //SongPlacesContainer.getInstance().getSongPlacesArray().clear();
 
         JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url + "/songplaces/all", new Response.Listener<JSONArray>() {
 
@@ -71,22 +74,22 @@ public class RESTclient extends Application{
                 Log.e("myapp", response.toString());
 
                 JSONObject jo;
-                songPlaces.clear();
 
                 for(int i = 0; i < response.length(); i++){
 
                     try {
                         jo = (JSONObject)response.get(i);
                         double lat = (double)jo.getDouble("PlaceLat");
-                        double lon = (double)jo.getDouble("PlaceLong");
-                        int likes = (int)jo.getInt("Likes");
+                        double lon = (double) jo.getDouble("PlaceLong");
+                        //int likes = (int)jo.getInt("Likes");
                         String songID = jo.getString("SpotifyID");
                         String album = jo.getString("Album");
                         String title = jo.getString("Title");
                         String artist = jo.getString("Artist");
 
-                        SongPlace sp = new SongPlace(lat, lon, songID, title, artist, album, likes);
-                        songPlaces.add(sp);
+                        System.out.println("ARTIST1: " + artist);
+                        SongPlacesContainer.getInstance().getSongPlacesArray().add(new SongPlace(lat, lon, songID, title, artist, album, 1));
+                        System.out.println(SongPlacesContainer.getInstance().getSongPlacesArray().size());
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -104,13 +107,14 @@ public class RESTclient extends Application{
 
         addToRequestQueue(arrayRequest);
 
-        return songPlaces;
     }
 
 
-    public ArrayList<SongPlace> getSongPlaces(double lat1, double lat2, double lon1, double lon2) {
+    public void fetchSongPlaces(double lat1, double lat2, double lon1, double lon2) {
 
         JSONObject obj = new JSONObject();
+        //SongPlacesContainer.getInstance().getSongPlacesArray().clear();
+
         try {
             obj.put("lat1", lat1);
             obj.put("lat2", lat2);
@@ -129,22 +133,22 @@ public class RESTclient extends Application{
                 Log.e("myapp", response.toString());
 
                 JSONObject jo;
-                songPlaces.clear();
 
                 for(int i = 0; i < response.length(); i++){
 
                     try {
                         jo = (JSONObject)response.get(i);
                         double lat = (double)jo.getDouble("PlaceLat");
-                        double lon = (double)jo.getDouble("PlaceLong");
-                        int likes = (int)jo.getInt("Likes");
+                        double lon = (double) jo.getDouble("PlaceLong");
+                        //int likes = (int)jo.getInt("Likes");
                         String songID = jo.getString("SpotifyID");
                         String album = jo.getString("Album");
                         String title = jo.getString("Title");
                         String artist = jo.getString("Artist");
 
-                        SongPlace sp = new SongPlace(lat, lon, songID, title, artist, album, likes);
-                        songPlaces.add(sp);
+                        SongPlace sp = new SongPlace(lat, lon, songID, title, artist, album, 1);
+                        SongPlacesContainer.getInstance().getSongPlacesArray().add(sp);
+                        System.out.println("SIZE AFTER ADD: " + SongPlacesContainer.getInstance().getSongPlacesArray().size());
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -162,7 +166,6 @@ public class RESTclient extends Application{
 
         addToRequestQueue(arrayRequest);
 
-        return songPlaces;
     }
 
 
@@ -233,6 +236,11 @@ public class RESTclient extends Application{
         });
 
         addToRequestQueue(jObjR);
+    }
+
+    public ArrayList<SongPlace> getSongPlaces(){
+        System.out.println("HALLÅ SIIIIIZE! " + SongPlacesContainer.getInstance().getSongPlacesArray().size());
+        return SongPlacesContainer.getInstance().getSongPlacesArray();
     }
 }
 

@@ -1,12 +1,16 @@
 package com.redpandateam.places;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.redpandateam.places.util.MyBroadcastReceiver;
 import com.spotify.sdk.android.player.Spotify;
@@ -19,7 +23,7 @@ import com.spotify.sdk.android.player.Player;
 import com.spotify.sdk.android.player.PlayerNotificationCallback;
 import com.spotify.sdk.android.player.PlayerState;
 
-public class AuthActivity extends AppCompatActivity implements
+public class AuthActivity extends Activity implements
         PlayerNotificationCallback, ConnectionStateCallback {
 
     // TODO: Replace with your client ID
@@ -35,23 +39,38 @@ public class AuthActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
+        TextView textView = (TextView) findViewById(R.id.title_textview);
 
-        AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID,
-                AuthenticationResponse.Type.TOKEN,
-                REDIRECT_URI);
-        builder.setScopes(new String[]{"user-read-private", "streaming"});
-        AuthenticationRequest request = builder.build();
+        Button loginButton = (Button) findViewById(R.id.login2Button);
+        Typeface font = Typeface.createFromAsset(getAssets(), "CircularStd-Bold.otf");
+        loginButton.setTypeface(font);
+        textView.setTypeface(font);
+        loginButton.setOnClickListener(new View.OnClickListener() {
 
-        AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
+            @Override
+            public void onClick(View view) {
+                AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID,
+                        AuthenticationResponse.Type.TOKEN,
+                        REDIRECT_URI);
+                builder.setScopes(new String[]{"user-read-private", "streaming"});
+                AuthenticationRequest request = builder.build();
+
+                AuthenticationClient.openLoginActivity(AuthActivity.this, REQUEST_CODE, request);
+
+//                Intent myIntent = new Intent(MainActivity.this, AuthActivity.class);
+//                MainActivity.this.startActivity(myIntent);
+            }
+        });
+
 
     }
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_auth, menu);
         return true;
-    }
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -101,7 +120,9 @@ public class AuthActivity extends AppCompatActivity implements
     @Override
     public void onLoggedIn() {
         Log.d("AuthActivity", "User logged in");
-        finish();
+        Intent myIntent = new Intent(AuthActivity.this, MapsActivity.class);
+        AuthActivity.this.startActivity(myIntent);
+// finish();
     }
 
     @Override
