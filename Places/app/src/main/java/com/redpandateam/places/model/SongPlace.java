@@ -1,11 +1,14 @@
 package com.redpandateam.places.model;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.clustering.ClusterItem;
+
 import java.util.ArrayList;
 
 /**
  * Created by bjornlexell on 11/08/15.
  */
-public class SongPlace {
+public class SongPlace implements ClusterItem {
 
     private double lat, lon;
     private int likes;
@@ -46,5 +49,10 @@ public class SongPlace {
 
     public double getLon() {
         return this.lon;
+    }
+
+    @Override
+    public LatLng getPosition() {
+        return new LatLng(lat,lon);
     }
 }
