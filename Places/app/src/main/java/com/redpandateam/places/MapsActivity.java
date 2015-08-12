@@ -1,6 +1,7 @@
 package com.redpandateam.places;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.location.Criteria;
 import android.location.Location;
@@ -24,6 +25,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.redpandateam.places.model.SongPlace;
@@ -35,12 +37,19 @@ import com.redpandateam.places.util.RESTclient;
 import java.util.ArrayList;
 
 
-public class MapsActivity extends AppCompatActivity implements LocationListener {
+public class MapsActivity extends AppCompatActivity implements LocationListener,
+        ClusterManager.OnClusterClickListener<SongPlace>,
+        ClusterManager.OnClusterInfoWindowClickListener<SongPlace>,
+        ClusterManager.OnClusterItemClickListener<SongPlace>,
+        ClusterManager.OnClusterItemInfoWindowClickListener<SongPlace> {
 
     private GoogleMap googleMap;
     private ArrayList<SongPlace> markers;
     private Marker marker;
+    private SongPlace newSongPlace = null;
     private ClusterManager<SongPlace> mClusterManager;
+    private Cluster<SongPlace> clickedCluster;
+    private SongPlace clickedClusterItem;
 
     private MyBroadcastReceiver mReceiver = new MyBroadcastReceiver();
 
@@ -76,7 +85,6 @@ public class MapsActivity extends AppCompatActivity implements LocationListener 
 
         locationManager.requestLocationUpdates(bestProvider, 20000, 0, this);
 
-        //markers = RESTclient.getInstance().getAllSongPlaces();
 
         googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
 
@@ -117,7 +125,7 @@ public class MapsActivity extends AppCompatActivity implements LocationListener 
         });
 
         // Setting a custom info window adapter for the google map
-        googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+        /*googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
 
             // Use default InfoWindow frame
             @Override
@@ -127,31 +135,25 @@ public class MapsActivity extends AppCompatActivity implements LocationListener 
 
             // Defines the contents of the InfoWindow
             @Override
-            public View getInfoContents(Marker arg0) {
+            public View getInfoContents(Marker marker) {
 
                 // Getting view from the layout file info_window_layout
                 View v = getLayoutInflater().inflate(R.layout.info_window_layout, null);
 
                 // Getting the position from the marker
-                LatLng latLng = arg0.getPosition();
+                LatLng latLng = marker.getPosition();
 
-                // Getting reference to the TextView to set latitude
                 TextView tvLat = (TextView) v.findViewById(R.id.tv_lat);
-
-                // Getting reference to the TextView to set longitude
                 TextView tvLng = (TextView) v.findViewById(R.id.tv_lng);
 
-                // Setting the latitude
                 tvLat.setText("Latitude:" + latLng.latitude);
-
-                // Setting the longitude
                 tvLng.setText("Longitude:" + latLng.longitude);
 
                 // Returning the view containing InfoWindow contents
                 return v;
 
             }
-        });
+        });*/
 
         // Setting a click event handler for the map
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -262,8 +264,51 @@ public class MapsActivity extends AppCompatActivity implements LocationListener 
         googleMap.setOnCameraChangeListener(mClusterManager);
         googleMap.setOnMarkerClickListener(mClusterManager);
 
+
+        // Creating cluster manager object.
+        mClusterManager.setRenderer(new MyClusterRenderer(this, googleMap,
+                mClusterManager));
+
+        googleMap.setOnInfoWindowClickListener(mClusterManager);
+        googleMap.setInfoWindowAdapter(mClusterManager.getMarkerManager());
+        mClusterManager.getClusterMarkerCollection().setOnInfoWindowAdapter(
+                new MyCustomAdapterForClusters());
+        mClusterManager.getMarkerCollection().setOnInfoWindowAdapter(
+                new MyCustomAdapterForItems());
+        googleMap.setOnMarkerClickListener(mClusterManager);
+        mClusterManager.setOnClusterClickListener(this);
+        mClusterManager.setOnClusterInfoWindowClickListener(this);
+        mClusterManager.setOnClusterItemClickListener(this);
+        mClusterManager.setOnClusterItemInfoWindowClickListener(this);
+
+        mClusterManager
+                .setOnClusterClickListener(new ClusterManager.OnClusterClickListener<SongPlace>() {
+                    @Override
+                    public boolean onClusterClick(Cluster<SongPlace> cluster) {
+                        clickedCluster = cluster;
+                        return false;
+                    }
+                });
+
+        mClusterManager
+                .setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<SongPlace>() {
+                    @Override
+                    public boolean onClusterItemClick(SongPlace item) {
+                        clickedClusterItem = item;
+                        return false;
+                    }
+                });
+
+        //Adding Objects to the Cluster.
+
+        /*mClusterManager.addItem(mItemData);
+        googleMap.animateCamera(CameraUpdateFactory
+                .newLatLngZoom(mLatLng, 7));
+        mClusterManager.cluster();*/
+
         // Add cluster items (markers) to the cluster manager.
         addItems();
+
     }
 
     private void addItems() {
@@ -282,7 +327,7 @@ public class MapsActivity extends AppCompatActivity implements LocationListener 
         }
     }
 
-    /*class MyClusterRenderer extends DefaultClusterRenderer<SongPlace> {
+    class MyClusterRenderer extends DefaultClusterRenderer<SongPlace> {
 
         public MyClusterRenderer(Context context, GoogleMap map,
                                  ClusterManager<SongPlace> clusterManager) {
@@ -302,108 +347,117 @@ public class MapsActivity extends AppCompatActivity implements LocationListener 
     }
 
     // Custom adapter info view :
-
     public class MyCustomAdapterForItems implements GoogleMap.InfoWindowAdapter {
 
-        private final View myContentsView;
+        private final View v;
 
         MyCustomAdapterForItems() {
-            myContentsView = getLayoutInflater().inflate(
-                    R.layout.map_info_window_dialog, null);
+            v = getLayoutInflater().inflate(
+                    R.layout.info_window_layout, null);
         }
 
         @Override
-        public View getInfoContents(Marker marker) {
+        public View getInfoWindow(Marker arg0) {
             return null;
         }
 
+        // Defines the contents of the InfoWindow
         @Override
-        public View getInfoWindow(Marker marker) {
-            // TODO Auto-generated method stub
+        public View getInfoContents(Marker marker) {
 
+            // Getting the position from the marker
+            LatLng latLng = marker.getPosition();
 
-            TextView tvTitle = ((TextView) myContentsView
-                    .findViewById(R.id.txtHeader));
-            TextView tvSnippet = ((TextView) myContentsView
-                    .findViewById(R.id.txtAddress));
+            TextView tvLat = (TextView) v.findViewById(R.id.tv_lat);
+            TextView tvLng = (TextView) v.findViewById(R.id.tv_lng);
+            TextView song = (TextView) v.findViewById(R.id.song);
+            TextView artist = (TextView) v.findViewById(R.id.artist);
 
-            tvTitle.setTypeface(mTyFaceKreonBold);
-            tvSnippet.setTypeface(mTyFaceKreonBold);
             if (clickedClusterItem != null) {
-                tvTitle.setText(clickedClusterItem.getmStoreName());
-                tvSnippet.setText(clickedClusterItem.getmAddressOne());
+                song.setText(clickedClusterItem.getTitle());
+                artist.setText(clickedClusterItem.getArtist());
 
             }
-            return myContentsView;
+            tvLat.setText("Latitude:" + latLng.latitude);
+            tvLng.setText("Longitude:" + latLng.longitude);
+
+            // Returning the view containing InfoWindow contents
+            return v;
+
         }
     }
     // class for Main Clusters.
 
     public class MyCustomAdapterForClusters implements GoogleMap.InfoWindowAdapter {
 
-        private final View myContentsView;
+        private final View v;
 
         MyCustomAdapterForClusters() {
-            myContentsView = getLayoutInflater().inflate(
-                    R.layout.map_info_window_dialog, null);
-        }
-
-        @Override
-        public View getInfoContents(Marker marker) {
-            return null;
+            v = getLayoutInflater().inflate(
+                    R.layout.info_window_layout, null);
         }
 
         @Override
         public View getInfoWindow(Marker marker) {
-            // TODO Auto-generated method stub
+            return null;
+        }
 
+        @Override
+        public View getInfoContents(Marker marker) {
 
-            TextView tvTitle = ((TextView) myContentsView
-                    .findViewById(R.id.txtHeader));
-            TextView tvSnippet = ((TextView) myContentsView
-                    .findViewById(R.id.txtAddress));
-            tvSnippet.setVisibility(View.GONE);
-            tvTitle.setTypeface(mTyFaceKreonBold);
-            tvSnippet.setTypeface(mTyFaceKreonBold);
+            // Getting the position from the marker
+            LatLng latLng = marker.getPosition();
+
+            TextView title = (TextView) v.findViewById(R.id.title);
+            TextView tvLat = (TextView) v.findViewById(R.id.tv_lat);
+            TextView tvLng = (TextView) v.findViewById(R.id.tv_lng);
+            TextView song = (TextView) v.findViewById(R.id.song);
+            TextView artist = (TextView) v.findViewById(R.id.artist);
+
+            tvLat.setText("Latitude:" + latLng.latitude);
+            tvLng.setText("Longitude:" + latLng.longitude);
 
 
             if (clickedCluster != null) {
-                tvTitle.setText(String
+                title.setText(String
                         .valueOf(clickedCluster.getItems().size())
-                        + " more offers available");
+                        + " songs listed here");
+                song.setText(clickedClusterItem.getTitle());
+                artist.setText(clickedClusterItem.getArtist());
             }
-            return myContentsView;
+            return v;
         }
     }
 
     @Override
-    public void onClusterItemInfoWindowClick(MyItem item) {
+    public void onClusterItemInfoWindowClick(SongPlace item) {
         // TODO Auto-generated method stub
 
-        Intent intent = new Intent(Map.this,NextActivity.class);
-        intent.putExtra("mLatitude", item.getmLatitude());
-        intent.putExtra("mLongitude", item.getmLongitude());
+        //TODO: Play song?
 
-        startActivity(intent);
+        /*Intent intent = new Intent(MapsActivity.this, NextActivity.class);
+        intent.putExtra("mLatitude", item.getLat());
+        intent.putExtra("mLongitude", item.getLon());
+
+        startActivity(intent);*/
         finish();
     }
 
     @Override
-    public boolean onClusterItemClick(MyItem item) {
+    public boolean onClusterItemClick(SongPlace item) {
         // TODO Auto-generated method stub
         return false;
     }
 
     @Override
-    public void onClusterInfoWindowClick(Cluster<MyItem> cluster) {
-        // TODO Auto-generated method stub
+    public void onClusterInfoWindowClick(Cluster<SongPlace> cluster) {
+        // TODO Show list of songs
     }
 
     @Override
-    public boolean onClusterClick(Cluster<MyItem> cluster) {
+    public boolean onClusterClick(Cluster<SongPlace> cluster) {
         // TODO Auto-generated method stub
         return false;
     }
-}*/
 
 }
