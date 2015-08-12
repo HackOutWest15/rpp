@@ -80,7 +80,7 @@ public class MapsActivity extends AppCompatActivity implements LocationListener 
             }
         });
 
-        System.out.println("TRACKID " + mReceiver.getSongId());
+//        System.out.println("TRACKID " + mReceiver.getSongId());
     }
 
     @Override
