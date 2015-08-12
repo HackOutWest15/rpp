@@ -1,3 +1,4 @@
+
 package com.redpandateam.places;
 
 import android.app.Fragment;
@@ -6,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -33,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
     private LinearLayout mDrawerLinear;
-    private final MyBroadcastReceiver mReceiver = new MyBroadcastReceiver();
 
     // slide menu items
     private String[] navMenuTitles;
@@ -140,9 +141,11 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Slide menu item click listener
-     * */
+
+
+     // Slide menu item click listener
+
+
     private class NavDrawerClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position,
@@ -187,3 +190,32 @@ public class MainActivity extends AppCompatActivity {
 
     }
 }
+//package com.redpandateam.places;
+
+
+
+/*
+public class MainActivity extends Activity {
+    private static int SPLASH_TIME = 3000;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_splash_screen);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(MainActivity.this, AuthActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }, SPLASH_TIME);
+    }
+    @Override
+    protected void onDestroy() {
+
+        super.onDestroy();
+
+    }
+
+}*/
