@@ -2,6 +2,8 @@ package com.redpandateam.places;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
