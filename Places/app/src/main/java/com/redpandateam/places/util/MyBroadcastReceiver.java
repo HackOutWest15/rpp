@@ -34,8 +34,9 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
             String artistName = intent.getStringExtra("artist");
             String albumName = intent.getStringExtra("album");
             String trackName = intent.getStringExtra("track");
-            updateCurrentTrack(id, artistName, albumName,trackName);
+            //updateCurrentTrack(id, artistName, albumName,trackName);
 
+            RESTclient.getInstance().setTrack(trackName);
             int trackLengthInSec = intent.getIntExtra("length", 0);
             // Do something with extracted information...
         } else if (action.equals(BroadcastTypes.PLAYBACK_STATE_CHANGED)) {

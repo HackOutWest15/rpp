@@ -69,7 +69,6 @@
                 <action android:name="com.spotify.music.metadatachanged"/>
                 <action android:name="com.spotify.music.queuechanged"/>
             </intent-filter>
-
         </receiver>
     </application>
 
