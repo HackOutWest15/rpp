@@ -26,13 +26,13 @@ public class MapsActivity extends AppCompatActivity implements LocationListener 
 
     GoogleMap googleMap;
 
-    private final MyBroadcastReceiver mReceiver = new MyBroadcastReceiver();
+    private MyBroadcastReceiver mReceiver = new MyBroadcastReceiver();
+    private String id, artist, album, track;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-
         //show error dialog if GooglePlayServices not available
         if (!isGooglePlayServicesAvailable()) {
             finish();
@@ -77,6 +77,9 @@ public class MapsActivity extends AppCompatActivity implements LocationListener 
 
                 // Placing a marker on the touched position
                 googleMap.addMarker(markerOptions);
+                System.out.println("MapsActivity" + mReceiver.toString());
+                System.out.println("MapsActivity " + mReceiver.getSongId());
+               // System.out.println(mReceiver.songPlace.toString());
             }
         });
 
@@ -143,5 +146,12 @@ public class MapsActivity extends AppCompatActivity implements LocationListener 
             return false;
         }
     }
+    public void updateCurrentTrack(String id, String artist, String album, String track){
+        this.id=id;
+        this.artist = album;
+        this.album=album;
+        this.track = track;
+    }
+
 
 }

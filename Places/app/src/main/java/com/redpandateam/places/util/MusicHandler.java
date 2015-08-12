@@ -1,3 +1,4 @@
+/*
 package com.redpandateam.places.util;
 
 import android.util.Log;
@@ -52,7 +53,8 @@ public class MusicHandler {
                 // handle error
             }
         });
-       
+
 
     }
 }
+*/

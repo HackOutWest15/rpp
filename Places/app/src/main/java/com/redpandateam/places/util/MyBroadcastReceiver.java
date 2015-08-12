@@ -2,6 +2,10 @@ package com.redpandateam.places.util;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+
+import com.redpandateam.places.MapsActivity;
+import com.redpandateam.places.model.SongPlace;
 
 public class MyBroadcastReceiver extends BroadcastReceiver {
 
@@ -12,7 +16,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
         static final String QUEUE_CHANGED = SPOTIFY_PACKAGE + ".queuechanged";
         static final String METADATA_CHANGED = SPOTIFY_PACKAGE + ".metadatachanged";
     }
-
+    public SongPlace songPlace = new SongPlace(0,0,null,null,null,null,0);
     @Override
     public void onReceive(Context context, Intent intent) {
         // This is sent with all broadcasts, regardless of type. The value is taken from
@@ -24,10 +28,14 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 
         if (action.equals(BroadcastTypes.METADATA_CHANGED)) {
             String id = intent.getStringExtra("id");
+            System.out.println(id);
             setSongId(id);
+
             String artistName = intent.getStringExtra("artist");
             String albumName = intent.getStringExtra("album");
             String trackName = intent.getStringExtra("track");
+            updateCurrentTrack(id, artistName, albumName,trackName);
+
             int trackLengthInSec = intent.getIntExtra("length", 0);
             // Do something with extracted information...
         } else if (action.equals(BroadcastTypes.PLAYBACK_STATE_CHANGED)) {
@@ -44,10 +52,11 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
     }
 
     public String getSongId(){
-        if(trackId != null) {
+        try{
             return trackId;
-        }else{
-            throw new NullPointerException("trackid null");
+        }catch (NullPointerException e ){
+
         }
+        return "Hejsan";
     }
 }
