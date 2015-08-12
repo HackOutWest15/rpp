@@ -27,9 +27,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.redpandateam.places.model.SongPlace;
+import com.redpandateam.places.model.CurrentTrack;
+import com.redpandateam.places.model.SongPlace;
+import com.redpandateam.places.util.MyBroadcastReceiver;
 import com.redpandateam.places.util.RESTclient;
 
 import java.util.ArrayList;
+
 
 public class MapsActivity extends AppCompatActivity implements LocationListener {
 
@@ -38,10 +42,18 @@ public class MapsActivity extends AppCompatActivity implements LocationListener 
     private Marker marker;
     private ClusterManager<SongPlace> mClusterManager;
 
+    private MyBroadcastReceiver mReceiver = new MyBroadcastReceiver();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        RESTclient.getInstance().saveSongPlace("terrorulf", "randomidstring", "Ulfs pruttsång", "Historier från ett hack", "Johnny Rocker", 12.0, 14.2);
+        ArrayList<SongPlace> sps = RESTclient.getInstance().getSongPlaces(0.0, 0.0, 1.1, 1.1);
+        for(SongPlace sp : sps){
+            System.out.println(sp.getArtist());
+        }
 
         //show error dialog if GooglePlayServices not available
         if (!isGooglePlayServicesAvailable()) {
@@ -133,7 +145,7 @@ public class MapsActivity extends AppCompatActivity implements LocationListener 
                 tvLat.setText("Latitude:" + latLng.latitude);
 
                 // Setting the longitude
-                tvLng.setText("Longitude:"+ latLng.longitude);
+                tvLng.setText("Longitude:" + latLng.longitude);
 
                 // Returning the view containing InfoWindow contents
                 return v;
@@ -168,6 +180,12 @@ public class MapsActivity extends AppCompatActivity implements LocationListener 
         });
 
         setUpClusterer();
+
+        /*googleMap.addMarker(markerOptions);
+        System.out.println("MapsActivity" + mReceiver.toString());
+        System.out.println("MapsActivity " + mReceiver.getSongId());
+        // System.out.println(mReceiver.songPlace.toString());
+        System.out.println("TRACKNAME : " + CurrentTrack.getInstance().getTitle());*/
     }
 
     @Override

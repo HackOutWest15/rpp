@@ -2,10 +2,12 @@ package com.redpandateam.places.util;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
@@ -16,6 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Console;
 import java.util.ArrayList;
 
 /**
@@ -27,6 +30,8 @@ public class RESTclient extends Application{
     private RequestQueue queue;
     private SongPlace sp;
     private static RESTclient instance;
+    private String id, artist, album, track;
+
 
     ArrayList<SongPlace> songPlaces;
 
@@ -34,7 +39,7 @@ public class RESTclient extends Application{
     public void onCreate(){
         super.onCreate();
         instance = this;
-        this.url = "http://localhost:9999";
+        this.url = "http://10.47.12.31:9999";
         songPlaces = new ArrayList<SongPlace>();
 
     }
@@ -56,23 +61,14 @@ public class RESTclient extends Application{
         return queue;
     }
 
-    public ArrayList<SongPlace> getSongPlaces(double lat1, double lat2, double lon1, double lon2) {
+    public ArrayList<SongPlace> getAllSongPlaces() {
 
-        JSONObject obj = new JSONObject();
-        try {
-            obj.put("lat1", lat1);
-            obj.put("lat2", lat2);
-            obj.put("lon1", lon1);
-            obj.put("lon2", lon2);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.POST, url + "/songplaces", obj, new Response.Listener<JSONArray>() {
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url + "/songplaces/all", new Response.Listener<JSONArray>() {
 
             @Override
             public void onResponse(JSONArray response) {
+
+                Log.e("myapp", response.toString());
 
                 JSONObject jo;
                 songPlaces.clear();
@@ -100,7 +96,69 @@ public class RESTclient extends Application{
 
             }
 
-        }, null);
+        }, new Response.ErrorListener(){
+            public void onErrorResponse(VolleyError error) {
+                Log.e("ResponseError", error.toString());
+            }
+        });
+
+        addToRequestQueue(arrayRequest);
+
+        return songPlaces;
+    }
+
+
+    public ArrayList<SongPlace> getSongPlaces(double lat1, double lat2, double lon1, double lon2) {
+
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("lat1", lat1);
+            obj.put("lat2", lat2);
+            obj.put("lon1", lon1);
+            obj.put("lon2", lon2);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.POST, url + "/songplaces", obj, new Response.Listener<JSONArray>() {
+
+            @Override
+            public void onResponse(JSONArray response) {
+
+                Log.e("myapp", response.toString());
+
+                JSONObject jo;
+                songPlaces.clear();
+
+                for(int i = 0; i < response.length(); i++){
+
+                    try {
+                        jo = (JSONObject)response.get(i);
+                        double lat = (double)jo.getDouble("PlaceLat");
+                        double lon = (double)jo.getDouble("PlaceLong");
+                        int likes = (int)jo.getInt("Likes");
+                        String songID = jo.getString("SpotifyID");
+                        String album = jo.getString("Album");
+                        String title = jo.getString("Title");
+                        String artist = jo.getString("Artist");
+
+                        SongPlace sp = new SongPlace(lat, lon, songID, title, artist, album, likes);
+                        songPlaces.add(sp);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+
+            }
+
+        }, new Response.ErrorListener(){
+            public void onErrorResponse(VolleyError error) {
+                Log.e("ResponseError", error.toString());
+            }
+        });
 
         addToRequestQueue(arrayRequest);
 
@@ -131,7 +189,11 @@ public class RESTclient extends Application{
                     public void onResponse(JSONObject response){
                         System.out.println(response);
                     }
-                }, null);
+                }, new Response.ErrorListener(){
+            public void onErrorResponse(VolleyError error) {
+                Log.e("ResponseError", error.toString());
+            }
+        });
 
         addToRequestQueue(jObjR);
 
@@ -164,12 +226,13 @@ public class RESTclient extends Application{
                         }
 
                     }
-                }, null);
+                }, new Response.ErrorListener(){
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("ResponseError", error.toString());
+                    }
+        });
 
         addToRequestQueue(jObjR);
     }
-
-
-
 }
 
