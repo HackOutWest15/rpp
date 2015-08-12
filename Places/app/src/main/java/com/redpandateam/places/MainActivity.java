@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.redpandateam.places.navigationdrawer.NavDrawerItem;
 import com.redpandateam.places.navigationdrawer.NavDrawerListAdapter;
+import com.redpandateam.places.util.MusicHandler;
 import com.redpandateam.places.util.RESTclient;
 
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
     private LinearLayout mDrawerLinear;
+    private MusicHandler musicHandler = new MusicHandler();
 
     // slide menu items
     private String[] navMenuTitles;
@@ -133,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
+    
     /**
      * Slide menu item click listener
      * */

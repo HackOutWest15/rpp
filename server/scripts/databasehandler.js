@@ -7,6 +7,7 @@ module.exports = {
     getSongPlaces: getSongPlaces,
     testData: testData,
     insertSongPlace: insertSongPlace,
+    likeSongPlace: likeSongPlace,
     //getSub: getSub,
     //createTable: createTable,
 
@@ -21,6 +22,7 @@ var GET_SONGS = "SELECT * FROM SongPlace WHERE PlaceLat BETWEEN ? AND ? AND Plac
 var CREATE_SONG = "CREATE TABLE SongPlace (UserID varchar(255) NOT NULL, Title varchar(255), Artist varchar(255), Album varchar(255), PlaceLat decimal(8,5) NOT NULL, PlaceLong decimal(8,5) NOT NULL, SpotifyID varchar(255) NOT NULL, PRIMARY KEY (SpotifyID, PlaceLat, PlaceLong), INDEX Userx (UserID))";
 
 var INSERT_LIKE = "INSERT INTO Likes VALUES (?,?,?,?)";
+var DELETE_LIKE = "DELETE FROM Likes WHERE User = ? AND SpotifyID = ? AND PlaceLat = ? AND PlaceLong = ?";
 var GET_LIKES = "SELECT COUNT(*) as Amount FROM Likes WHERE SpotifyID = ? AND PlaceLat = ? AND PlaceLong = ?";
 var CREATE_LIKE = "CREATE TABLE Likes (User varchar(255), SpotifyID varchar(255), PlaceLat decimal(8,5), PlaceLong decimal(8,5), PRIMARY KEY (User, SpotifyID, PlaceLat, PlaceLong), FOREIGN KEY (SpotifyID, PlaceLat, PlaceLong) REFERENCES SongPlace(SpotifyID, PlaceLat, PlaceLong) ON UPDATE CASCADE ON DELETE CASCADE)";
 var INSERT_TEST = "INSERT INTO SongPlace VALUES ('testuser', 'testsong', 'testartist', 'testalbum', '0.5', '0.5', 'spotuserid');";
@@ -80,8 +82,24 @@ function insertSongPlace(uid, title, artist, album, placelat, placelong, spotify
 }
 
 //UserID, SpotifyID, PlaceLat, PlaceLong
-function likeSongPlace(uid, spotifyid, placelat, placelong) {
-    connection.query(INSERT_LIKE, [uid, spotifyid, placelat, placelong]);
+function likeSongPlace(uid, spotifyid, placelat, placelong, callback) {
+    connection.query(DELETE_LIKE, [uid, spotifyid, placelat, placelong], function(err, res) {
+        if (err) {
+            console.log(err);
+            callback(err);
+        } else if (res.affectedRows === 0) {
+            connection.query(INSERT_LIKE, [uid, spotifyid, placelat, placelong], function(err, result) {
+                if (err) {
+                    console.log(err);
+                    callback(err);
+                } else {
+                    callback(true);
+                }
+            });
+        } else {
+            callback(false);
+        }
+    });
 }
 
 function getSongPlaces(lat1, long1, lat2, long2, callback) {

@@ -29,6 +29,14 @@ app.post('/songplace', function (req, res) {
     });
 });
 
+app.post('/songplace/like', function (req, res) {
+    var body = req.body;
+    db.likeSongPlace(body.UserID, body.SpotifyID, body.PlaceLat, body.PlaceLong, function(result) {
+        console.log({Liked: result});
+        res.json({ Liked : result });
+    });
+});
+
 
 var server = app.listen(9999, function () {
 
