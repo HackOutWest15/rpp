@@ -3,6 +3,8 @@ package com.redpandateam.places;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -107,22 +109,21 @@ public class MapsActivity extends AppCompatActivity implements LocationListener,
                 //Remove all markers from map
                 mClusterManager.clearItems();
 
-                markers = RESTclient.getInstance().getSongPlaces(boundLat, boundLat2, boundLong, boundLong2);
-
-                for (SongPlace marker : markers) {
-                    googleMap.addMarker(new MarkerOptions()
-                            .position(marker.getPosition()));
-                    mClusterManager.addItem(marker);
-
-                }
-
-                mClusterManager.cluster();
-
-                if (marker != null) {
-                    googleMap.addMarker(new MarkerOptions()
-                            .position(marker.getPosition()));
-                }
-
+//                markers = RESTclient.getInstance().fetchSongPlaces(boundLat, boundLat2, boundLong, boundLong2);
+//
+//                for (SongPlace marker : markers) {
+//                    googleMap.addMarker(new MarkerOptions()
+//                            .position(marker.getPosition()));
+//                    mClusterManager.addItem(marker);
+//
+//                }
+//
+//                mClusterManager.cluster();
+//
+//                if (marker != null) {
+//                    googleMap.addMarker(new MarkerOptions()
+//                            .position(marker.getPosition()));
+//                }
             }
         });
 
@@ -255,7 +256,7 @@ public class MapsActivity extends AppCompatActivity implements LocationListener,
     private void setUpClusterer() {
 
         // Position the map.
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(51.503186, -0.126446), 10));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(57.4511229, 12.844400), 10));
 
         // Initialize the manager with the context and the map.
         // (Activity extends context, so we can pass 'this' in the constructor.)
