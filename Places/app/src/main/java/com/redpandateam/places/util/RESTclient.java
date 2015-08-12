@@ -234,21 +234,5 @@ public class RESTclient extends Application{
 
         addToRequestQueue(jObjR);
     }
-
-
-    public void updateCurrentTrack(String id, String artist, String album, String track){
-        this.id=id;
-        this.artist = album;
-        this.album=album;
-        this.track = track;
-    }
-
-    public void setTrack(String track){
-        this.track=track;
-
-    }
-    public String getTrack(){
-        return this.track;
-    }
 }
 

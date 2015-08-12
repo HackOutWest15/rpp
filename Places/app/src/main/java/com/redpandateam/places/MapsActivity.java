@@ -18,6 +18,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.redpandateam.places.model.CurrentTrack;
 import com.redpandateam.places.model.SongPlace;
 import com.redpandateam.places.util.MyBroadcastReceiver;
 import com.redpandateam.places.util.RESTclient;
@@ -89,7 +90,7 @@ public class MapsActivity extends AppCompatActivity implements LocationListener 
                 System.out.println("MapsActivity" + mReceiver.toString());
                 System.out.println("MapsActivity " + mReceiver.getSongId());
                // System.out.println(mReceiver.songPlace.toString());
-                System.out.println("TRACKNAME : "+ RESTclient.getInstance().getTrack());
+                System.out.println("TRACKNAME : " + CurrentTrack.getInstance().getTitle());
             }
         });
 
