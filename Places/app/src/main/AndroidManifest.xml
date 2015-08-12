@@ -62,7 +62,7 @@
 
     </application>
     <receiver
-        android:name="MyBroadcastReceiver"
+        android:name=".util.MyBroadcastReceiver"
         android:enabled="true"
         android:exported="true">
 

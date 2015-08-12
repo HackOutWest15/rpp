@@ -2,10 +2,12 @@ package com.redpandateam.places.util;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
@@ -16,6 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Console;
 import java.util.ArrayList;
 
 /**
@@ -34,7 +37,7 @@ public class RESTclient extends Application{
     public void onCreate(){
         super.onCreate();
         instance = this;
-        this.url = "http://localhost:9999";
+        this.url = "http://10.47.12.31:9999";
         songPlaces = new ArrayList<SongPlace>();
 
     }
@@ -74,6 +77,8 @@ public class RESTclient extends Application{
             @Override
             public void onResponse(JSONArray response) {
 
+                Log.e("myapp", response.toString());
+
                 JSONObject jo;
                 songPlaces.clear();
 
@@ -100,7 +105,11 @@ public class RESTclient extends Application{
 
             }
 
-        }, null);
+        }, new Response.ErrorListener(){
+            public void onErrorResponse(VolleyError error) {
+                Log.e("ResponseError", error.toString());
+            }
+        });
 
         addToRequestQueue(arrayRequest);
 
@@ -131,7 +140,11 @@ public class RESTclient extends Application{
                     public void onResponse(JSONObject response){
                         System.out.println(response);
                     }
-                }, null);
+                }, new Response.ErrorListener(){
+            public void onErrorResponse(VolleyError error) {
+                Log.e("ResponseError", error.toString());
+            }
+        });
 
         addToRequestQueue(jObjR);
 
@@ -164,7 +177,11 @@ public class RESTclient extends Application{
                         }
 
                     }
-                }, null);
+                }, new Response.ErrorListener(){
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("ResponseError", error.toString());
+                    }
+        });
 
         addToRequestQueue(jObjR);
     }

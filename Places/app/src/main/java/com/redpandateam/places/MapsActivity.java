@@ -18,8 +18,11 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.redpandateam.places.model.SongPlace;
 import com.redpandateam.places.util.MyBroadcastReceiver;
 import com.redpandateam.places.util.RESTclient;
+
+import java.util.ArrayList;
 
 
 public class MapsActivity extends AppCompatActivity implements LocationListener {
@@ -32,6 +35,12 @@ public class MapsActivity extends AppCompatActivity implements LocationListener 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        RESTclient.getInstance().saveSongPlace("terrorulf", "randomidstring", "Ulfs pruttsång", "Historier från ett hack", "Johnny Rocker", 12.0, 14.2);
+        ArrayList<SongPlace> sps = RESTclient.getInstance().getSongPlaces(0.0, 0.0, 1.1, 1.1);
+        for(SongPlace sp : sps){
+            System.out.println(sp.getArtist());
+        }
 
         //show error dialog if GooglePlayServices not available
         if (!isGooglePlayServicesAvailable()) {
@@ -80,7 +89,9 @@ public class MapsActivity extends AppCompatActivity implements LocationListener 
             }
         });
 
-        System.out.println("TRACKID " + mReceiver.getSongId());
+        //System.out.println("TRACKID " + mReceiver.getSongId());
+
+
     }
 
     @Override
