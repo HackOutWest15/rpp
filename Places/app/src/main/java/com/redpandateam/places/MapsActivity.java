@@ -49,13 +49,15 @@ public class MapsActivity extends AppCompatActivity implements LocationListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        RESTclient.getInstance().saveSongPlace("terrorulf", "randomidstring", "Ulfs pruttsång", "Historier från ett hack", "Johnny Rocker", 12.0, 14.2);
         RESTclient.getInstance().fetchAllSongPlaces();
-        ArrayList<SongPlace> sps = RESTclient.getInstance().getSongPlaces();
 
-        for(SongPlace sp : sps){
-            System.out.println("ARTISTSTSTSTSTSTS: " + sp.getArtist());
-        }
+        //RESTclient.getInstance().saveSongPlace("terrorulf", "randomidstring", "Ulfs pruttsång", "Historier från ett hack", "Johnny Rocker", 12.0, 14.2);
+        //RESTclient.getInstance().fetchAllSongPlaces();
+        //ArrayList<SongPlace> sps = RESTclient.getInstance().getSongPlaces();
+
+        //for(SongPlace sp : sps){
+        //    System.out.println("ARTISTSTSTSTSTSTS: " + sp.getArtist());
+        //}
 
         //show error dialog if GooglePlayServices not available
         if (!isGooglePlayServicesAvailable()) {
@@ -99,7 +101,9 @@ public class MapsActivity extends AppCompatActivity implements LocationListener 
                 //Remove all markers from map
                 mClusterManager.clearItems();
 
-                markers = RESTclient.getInstance().getSongPlaces(boundLat, boundLat2, boundLong, boundLong2);
+                //RESTclient.getInstance().fetchSongPlaces(boundLat, boundLat2, boundLong, boundLong2);
+
+                markers = RESTclient.getInstance().getSongPlaces();
 
                 for (SongPlace marker : markers) {
                     googleMap.addMarker(new MarkerOptions()
@@ -160,6 +164,28 @@ public class MapsActivity extends AppCompatActivity implements LocationListener 
 
             @Override
             public void onMapClick(LatLng latLng) {
+
+                //Remove all markers from map
+                mClusterManager.clearItems();
+
+                //RESTclient.getInstance().fetchSongPlaces(boundLat, boundLat2, boundLong, boundLong2);
+
+                markers = RESTclient.getInstance().getSongPlaces();
+
+                for (SongPlace marker : markers) {
+                    googleMap.addMarker(new MarkerOptions()
+                            .position(marker.getPosition()));
+                    mClusterManager.addItem(marker);
+
+                }
+
+                mClusterManager.cluster();
+
+                if (marker != null) {
+                    googleMap.addMarker(new MarkerOptions()
+                            .position(marker.getPosition()));
+                }
+
 
                 // Creating a marker
                 MarkerOptions markerOptions = new MarkerOptions();

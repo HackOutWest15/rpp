@@ -64,7 +64,7 @@ public class RESTclient extends Application{
 
     public void fetchAllSongPlaces() {
 
-        //SongPlacesContainer.getInstance().getSongPlacesArray().clear();
+        SongPlacesContainer.getInstance().getSongPlacesArray().clear();
 
         JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url + "/songplaces/all", new Response.Listener<JSONArray>() {
 
@@ -96,7 +96,6 @@ public class RESTclient extends Application{
                     }
                 }
 
-
             }
 
         }, new Response.ErrorListener(){
@@ -113,7 +112,7 @@ public class RESTclient extends Application{
     public void fetchSongPlaces(double lat1, double lat2, double lon1, double lon2) {
 
         JSONObject obj = new JSONObject();
-        //SongPlacesContainer.getInstance().getSongPlacesArray().clear();
+        SongPlacesContainer.getInstance().getSongPlacesArray().clear();
 
         try {
             obj.put("lat1", lat1);
