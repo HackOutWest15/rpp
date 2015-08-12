@@ -59,6 +59,53 @@ public class RESTclient extends Application{
         return queue;
     }
 
+    public ArrayList<SongPlace> getAllSongPlaces() {
+
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url + "/songplaces/all", new Response.Listener<JSONArray>() {
+
+            @Override
+            public void onResponse(JSONArray response) {
+
+                Log.e("myapp", response.toString());
+
+                JSONObject jo;
+                songPlaces.clear();
+
+                for(int i = 0; i < response.length(); i++){
+
+                    try {
+                        jo = (JSONObject)response.get(i);
+                        double lat = (double)jo.getDouble("PlaceLat");
+                        double lon = (double)jo.getDouble("PlaceLong");
+                        int likes = (int)jo.getInt("Likes");
+                        String songID = jo.getString("SpotifyID");
+                        String album = jo.getString("Album");
+                        String title = jo.getString("Title");
+                        String artist = jo.getString("Artist");
+
+                        SongPlace sp = new SongPlace(lat, lon, songID, title, artist, album, likes);
+                        songPlaces.add(sp);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+
+            }
+
+        }, new Response.ErrorListener(){
+            public void onErrorResponse(VolleyError error) {
+                Log.e("ResponseError", error.toString());
+            }
+        });
+
+        addToRequestQueue(arrayRequest);
+
+        return songPlaces;
+    }
+
+
     public ArrayList<SongPlace> getSongPlaces(double lat1, double lat2, double lon1, double lon2) {
 
         JSONObject obj = new JSONObject();

@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-    
+
     /**
      * Slide menu item click listener
      * */
