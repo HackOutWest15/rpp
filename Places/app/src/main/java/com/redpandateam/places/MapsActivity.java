@@ -29,7 +29,7 @@ public class MapsActivity extends AppCompatActivity implements LocationListener 
 
     GoogleMap googleMap;
 
-    private final MyBroadcastReceiver mReceiver = new MyBroadcastReceiver();
+    private MyBroadcastReceiver mReceiver = new MyBroadcastReceiver();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,16 +86,15 @@ public class MapsActivity extends AppCompatActivity implements LocationListener 
 
                 // Placing a marker on the touched position
                 googleMap.addMarker(markerOptions);
+                System.out.println("MapsActivity" + mReceiver.toString());
+                System.out.println("MapsActivity " + mReceiver.getSongId());
+               // System.out.println(mReceiver.songPlace.toString());
+                System.out.println("TRACKNAME : "+ RESTclient.getInstance().getTrack());
             }
         });
 
-<<<<<<< HEAD
         //System.out.println("TRACKID " + mReceiver.getSongId());
 
-
-=======
-//        System.out.println("TRACKID " + mReceiver.getSongId());
->>>>>>> b0626ff88a807fca0a4fbb78992bb26a3800eb35
     }
 
     @Override
@@ -158,5 +157,7 @@ public class MapsActivity extends AppCompatActivity implements LocationListener 
             return false;
         }
     }
+
+
 
 }

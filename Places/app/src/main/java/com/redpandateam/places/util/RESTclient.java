@@ -30,6 +30,8 @@ public class RESTclient extends Application{
     private RequestQueue queue;
     private SongPlace sp;
     private static RESTclient instance;
+    private String id, artist, album, track;
+
 
     ArrayList<SongPlace> songPlaces;
 
@@ -234,6 +236,19 @@ public class RESTclient extends Application{
     }
 
 
+    public void updateCurrentTrack(String id, String artist, String album, String track){
+        this.id=id;
+        this.artist = album;
+        this.album=album;
+        this.track = track;
+    }
 
+    public void setTrack(String track){
+        this.track=track;
+
+    }
+    public String getTrack(){
+        return this.track;
+    }
 }
 

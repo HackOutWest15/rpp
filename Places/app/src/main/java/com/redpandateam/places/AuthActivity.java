@@ -8,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.redpandateam.places.util.MusicHandler;
 import com.redpandateam.places.util.MyBroadcastReceiver;
 import com.spotify.sdk.android.player.Spotify;
 import com.spotify.sdk.android.authentication.AuthenticationClient;
@@ -31,7 +30,6 @@ public class AuthActivity extends AppCompatActivity implements
     // Request code that will be passed together with authentication result to the onAuthenticationResult callback
     // Can be any integer
     private static final int REQUEST_CODE = 1337;
-    //private final MyBroadcastReceiver mReceiver = new MyBroadcastReceiver();
     private Player mPlayer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +84,6 @@ public class AuthActivity extends AppCompatActivity implements
                         mPlayer.addPlayerNotificationCallback(AuthActivity.this);
                         //mPlayer.play("spotify:track:2TpxZ7JUBn3uw46aR7qd6V");
                         //mPlayer.play(mReceiver.getSongId());
-                        //System.out.println("AuthActivity" + mReceiver.getSongId());
 
                     }
 
