@@ -38,9 +38,11 @@ public class MapsActivity extends AppCompatActivity implements LocationListener 
         setContentView(R.layout.activity_maps);
 
         RESTclient.getInstance().saveSongPlace("terrorulf", "randomidstring", "Ulfs pruttsång", "Historier från ett hack", "Johnny Rocker", 12.0, 14.2);
-        ArrayList<SongPlace> sps = RESTclient.getInstance().getSongPlaces(0.0, 0.0, 1.1, 1.1);
+        RESTclient.getInstance().fetchAllSongPlaces();
+        ArrayList<SongPlace> sps = RESTclient.getInstance().getSongPlaces();
+
         for(SongPlace sp : sps){
-            System.out.println(sp.getArtist());
+            System.out.println("ARTISTSTSTSTSTSTS: " + sp.getArtist());
         }
 
         //show error dialog if GooglePlayServices not available
